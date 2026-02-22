@@ -32,7 +32,12 @@ const googleProvider = {
                 id: entry.query_text('id'),
                 subject: entry.query_text('title') || '',
                 from: `${entry.query_text('author/name') || ''} <${entry.query_text('author/email') || ''}>`,
-                link: href ? `${href}&authuser=${mailbox}` : null,
+                link: href
+                    ? href.replace(
+                          'https://mail.google.com/mail',
+                          `https://mail.google.com/mail/u/${mailbox}`,
+                      )
+                    : null,
             };
         });
     },
