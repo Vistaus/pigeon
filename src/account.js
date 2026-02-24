@@ -22,8 +22,6 @@ export class Account {
         this._provider = providers[this._providerType];
         this._source = null;
         this._failCount = 0;
-
-        this._mail = goaAccount.get_mail();
     }
 
     async scanInbox() {
@@ -80,41 +78,8 @@ export class Account {
     }
 
     async _fetchMessagesIMAP() {
-        if (!this._mail) {
-            throw new Error('IMAP account does not have Mail interface');
-        }
-
-        if (!this._mail.imap_host) {
-            throw new Error('IMAP account is missing imap_host configuration');
-        }
-
-        if (!this._mail.imap_use_ssl && !this._mail.imap_use_tls) {
-            throw new Error('IMAP requires SSL/TLS or STARTTLS');
-        }
-
-        const useStartTls = !this._mail.imap_use_ssl && this._mail.imap_use_tls;
-        const defaultPort = useStartTls ? 143 : 993;
-
-        const [host, portStr] = this._mail.imap_host.split(':');
-        const port = portStr ? parseInt(portStr, 10) : defaultPort;
-        const imapUserName = this._mail.imap_user_name || this._mail.email_address;
-
-        const passwordBased = this.goaAccount.get_password_based();
-        if (!passwordBased) {
-            throw new Error('IMAP account does not have password');
-        }
-
-        const [password] = await passwordBased.call_get_password(
-            'imap-password',
-            this._cancellable,
-        );
-
         return await this._provider.fetchMessages({
-            host,
-            port,
-            username: imapUserName,
-            password,
-            useStartTls,
+            goaObject: this.goaAccount,
             cancellable: this._cancellable,
             logger: this._logger,
         });

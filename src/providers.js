@@ -72,7 +72,30 @@ const microsoftProvider = {
 };
 
 const imapProvider = {
-    async fetchMessages({ host, port, username, password, useStartTls, cancellable, logger }) {
+    async fetchMessages({ goaObject, cancellable, logger }) {
+        const mail = goaObject.get_mail();
+        if (!mail)
+            throw new Error('IMAP account does not have Mail interface');
+        if (!mail.imap_host)
+            throw new Error('IMAP account is missing imap_host configuration');
+        if (!mail.imap_use_ssl && !mail.imap_use_tls)
+            throw new Error('IMAP requires SSL/TLS or STARTTLS');
+
+        const useStartTls = !mail.imap_use_ssl && mail.imap_use_tls;
+        const defaultPort = useStartTls ? 143 : 993;
+        const [host, portStr] = mail.imap_host.split(':');
+        const port = portStr ? parseInt(portStr, 10) : defaultPort;
+        const username = mail.imap_user_name || mail.email_address;
+
+        const passwordBased = goaObject.get_password_based();
+        if (!passwordBased)
+            throw new Error('IMAP account does not have password');
+
+        const [password] = await passwordBased.call_get_password(
+            'imap-password',
+            cancellable,
+        );
+
         const client = new ImapClient({
             host,
             port,
