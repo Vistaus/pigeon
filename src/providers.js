@@ -1,5 +1,7 @@
 import Xmlb from 'gi://Xmlb';
 
+import { ImapClient } from './imap.js';
+
 const googleProvider = {
     getApiURL(priorityOnly) {
         const label = priorityOnly ? '%5Eiim' : '%5Ei';
@@ -69,7 +71,36 @@ const microsoftProvider = {
     },
 };
 
+const imapProvider = {
+    async fetchMessages({ host, port, username, password, useStartTls, cancellable, logger }) {
+        const client = new ImapClient({
+            host,
+            port,
+            username,
+            password,
+            useStartTls,
+            cancellable,
+            logger,
+        });
+
+        try {
+            await client.connect();
+            await client.selectMailbox('INBOX');
+            const unreadIds = await client.searchUnread();
+            const messages = await client.fetchMessages(unreadIds);
+            return messages;
+        } finally {
+            await client.logout();
+        }
+    },
+
+    getFallbackURL() {
+        return null;
+    },
+};
+
 export const providers = {
     google: googleProvider,
     ms_graph: microsoftProvider,
+    imap_smtp: imapProvider,
 };
