@@ -31,7 +31,7 @@ export class Account {
                 this._failCount++;
                 this._logger.log(`mail check failed (${this._failCount}): ${err.message}`);
                 if (this._failCount === 3) {
-                    Main.notifyError(this.mailbox, _(`Unable to check emails: ${err.message}`));
+                    Main.notifyError(this.mailbox, _('Unable to check emails: %s').format(err.message));
                 }
             }
         }
