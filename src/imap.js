@@ -172,32 +172,14 @@ export class ImapClient {
     }
 
     _parseMessages(response) {
-        const messages = [];
-        const lines = response.split('\n');
-        let currentMessage = null;
-        let currentHeaders = '';
-        let currentUid = null;
-
-        for (const line of lines) {
-            const fetchMatch = line.match(/\* (\d+) FETCH/);
-            if (fetchMatch) {
-                if (currentMessage && currentHeaders) {
-                    messages.push(this._parseHeaders(currentUid || currentMessage, currentHeaders));
-                }
-                currentMessage = fetchMatch[1];
-                const uidMatch = line.match(/UID (\d+)/);
-                currentUid = uidMatch ? uidMatch[1] : null;
-                currentHeaders = '';
-            } else if (currentMessage) {
-                currentHeaders += line + '\n';
-            }
-        }
-
-        if (currentMessage && currentHeaders) {
-            messages.push(this._parseHeaders(currentUid || currentMessage, currentHeaders));
-        }
-
-        return messages;
+        return response
+            .split(/(?=\* \d+ FETCH)/)
+            .filter((block) => block.startsWith('* '))
+            .map((block) => {
+                const uidMatch = block.match(/UID (\d+)/);
+                const seqMatch = block.match(/\* (\d+) FETCH/);
+                return this._parseHeaders(uidMatch?.[1] || seqMatch[1], block);
+            });
     }
 
     _unfoldHeaders(raw) {
