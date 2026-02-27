@@ -136,6 +136,8 @@ export class ImapClient {
     }
 
     async _readResponse(tag = null) {
+        const terminator = tag ? new RegExp(`${tag} (OK|NO|BAD)`) : /\r\n/;
+
         while (true) {
             const bytes = await this._input.read_bytes_async(
                 4096,
@@ -143,28 +145,14 @@ export class ImapClient {
                 this._cancellable,
             );
 
-            if (bytes.get_size() === 0) {
-                break;
-            }
+            if (bytes.get_size() === 0) break;
 
             this._buffer += new TextDecoder('utf-8').decode(bytes.get_data());
 
-            if (tag) {
-                if (
-                    this._buffer.includes(`${tag} OK`) ||
-                    this._buffer.includes(`${tag} NO`) ||
-                    this._buffer.includes(`${tag} BAD`)
-                ) {
-                    const result = this._buffer;
-                    this._buffer = '';
-                    return result;
-                }
-            } else {
-                if (this._buffer.includes('\r\n')) {
-                    const result = this._buffer;
-                    this._buffer = '';
-                    return result;
-                }
+            if (terminator.test(this._buffer)) {
+                const result = this._buffer;
+                this._buffer = '';
+                return result;
             }
         }
 
