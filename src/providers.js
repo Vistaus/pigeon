@@ -58,11 +58,18 @@ const googleProvider = {
         }
 
         return entries.map((entry) => {
+            const text = (xpath) => {
+                try {
+                    return entry.query_text(xpath);
+                } catch {
+                    return null;
+                }
+            };
             const href = entry.query_attr('link', 'href');
             return {
-                id: entry.query_text('id'),
-                subject: entry.query_text('title') || '',
-                from: `${entry.query_text('author/name') || ''} <${entry.query_text('author/email') || ''}>`,
+                id: text('id'),
+                subject: text('title') || '(No subject)',
+                from: `${text('author/name') || ''} <${text('author/email') || ''}>`,
                 link: href
                     ? href.replace(
                           'https://mail.google.com/mail',
@@ -92,7 +99,7 @@ const microsoftProvider = {
             const addr = msg.from?.emailAddress;
             return {
                 id: msg.id,
-                subject: msg.subject || '',
+                subject: msg.subject || '(No subject)',
                 from: addr ? `${addr.name} <${addr.address}>` : '',
                 link: msg.webLink || 'https://outlook.live.com',
             };
