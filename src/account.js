@@ -22,6 +22,8 @@ export class Account {
     }
 
     async scanInbox() {
+        if (this.goaAccount.get_account().mail_disabled) return;
+
         try {
             const messages = await this._fetchMessages();
             this._failCount = 0;
