@@ -1,5 +1,5 @@
 import Gio from 'gi://Gio';
-import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { gettext as _, ngettext } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
@@ -67,9 +67,26 @@ export class Account {
         // Oldest first so newest appear on top in notification stack
         const newMessages = [...messages].reverse().filter((msg) => !seenIds.has(msg.id));
 
+        const threshold = this._settings.get_int('group-threshold');
+        if (threshold > 0 && newMessages.length >= threshold) {
+            const subject = ngettext(
+                'You have %d unread email',
+                'You have %d unread emails',
+                newMessages.length,
+            ).format(newMessages.length);
+            this._showNotification({
+                subject,
+                from: this.mailbox,
+                link: this._provider.getInboxURL(this.mailbox),
+            });
+        } else {
+            for (const msg of newMessages) {
+                this._showNotification(msg);
+            }
+        }
+
         for (const msg of newMessages) {
             seenIds.add(msg.id);
-            this._showNotification(msg);
         }
 
         this._notifiedIds.set(this.mailbox, [...seenIds]);

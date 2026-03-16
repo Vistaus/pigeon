@@ -40,6 +40,19 @@ export default class PigeonPrefs extends ExtensionPreferences {
         settings.bind('check-interval', intervalRow, 'value', Gio.SettingsBindFlags.DEFAULT);
         notificationGroup.add(intervalRow);
 
+        const groupThresholdRow = new Adw.SpinRow({
+            title: _('Group notifications'),
+            subtitle: _('Show a summary instead of individual notifications when exceeding this count (0 to disable)'),
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 50,
+                step_increment: 1,
+                page_increment: 5,
+            }),
+        });
+        settings.bind('group-threshold', groupThresholdRow, 'value', Gio.SettingsBindFlags.DEFAULT);
+        notificationGroup.add(groupThresholdRow);
+
         const playSoundRow = new Adw.SwitchRow({
             title: _('Play sound'),
             subtitle: _('Play a notification sound when new emails arrive'),

@@ -28,6 +28,13 @@
             <description
             >Play a notification sound when new emails arrive</description>
         </key>
+        <key type="i" name="group-threshold">
+            <range min="0" max="50" />
+            <default>5</default>
+            <summary>Group notifications threshold</summary>
+            <description
+            >Show a single summary notification instead of individual ones when the number of new emails exceeds this value. Set to 0 to disable grouping.</description>
+        </key>
         <key type="b" name="persistent-notifications">
             <default>false</default>
             <summary>Keep notifications visible until dismissed</summary>

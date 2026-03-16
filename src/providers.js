@@ -41,6 +41,10 @@ const googleProvider = {
         return `https://mail.google.com/mail/feed/atom/${label}`;
     },
 
+    getInboxURL(mailbox) {
+        return `https://mail.google.com/mail/u/${mailbox}`;
+    },
+
     parseResponse(body, mailbox) {
         const xml = body.replace(/xmlns="[^"]*"/g, '');
 
@@ -75,7 +79,7 @@ const googleProvider = {
                           'https://mail.google.com/mail',
                           `https://mail.google.com/mail/u/${mailbox}`,
                       )
-                    : `https://mail.google.com/mail/u/${mailbox}`,
+                    : this.getInboxURL(mailbox),
             };
         });
     },
@@ -84,6 +88,10 @@ const googleProvider = {
 const microsoftProvider = {
     async fetchMessages(params) {
         return await fetchMessagesOAuth2(this, params);
+    },
+
+    getInboxURL() {
+        return 'https://outlook.live.com';
     },
 
     getApiURL(priorityOnly) {
@@ -101,13 +109,17 @@ const microsoftProvider = {
                 id: msg.id,
                 subject: msg.subject || '(No subject)',
                 from: addr ? `${addr.name} <${addr.address}>` : '',
-                link: msg.webLink || 'https://outlook.live.com',
+                link: msg.webLink || this.getInboxURL(),
             };
         });
     },
 };
 
 const imapProvider = {
+    getInboxURL() {
+        return null;
+    },
+
     async fetchMessages({ goaObject, cancellable, logger }) {
         const mail = goaObject.get_mail();
         if (!mail) throw new Error('IMAP account does not have Mail interface');
