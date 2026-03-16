@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pigeon@subz69.github\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-24 20:59+0100\n"
+"POT-Creation-Date: 2026-03-16 18:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: src/account.js
 #, javascript-format
 msgid "Unable to check emails: %s"
+msgstr ""
+
+#: src/account.js
+#, javascript-format
+msgid "You have %d unread email"
+msgid_plural "You have %d unread emails"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/account.js
+msgid "(No subject)"
 msgstr ""
 
 #: src/manager.js
@@ -48,6 +60,16 @@ msgstr ""
 
 #: src/prefs.js
 msgid "Time in seconds between email checks"
+msgstr ""
+
+#: src/prefs.js
+msgid "Group notifications"
+msgstr ""
+
+#: src/prefs.js
+msgid ""
+"Show a summary instead of individual notifications when exceeding this count "
+"(0 to disable)"
 msgstr ""
 
 #: src/prefs.js

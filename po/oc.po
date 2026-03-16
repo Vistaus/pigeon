@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pigeon@subz69.github\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-24 20:59+0100\n"
+"POT-Creation-Date: 2026-03-16 18:03+0100\n"
 "PO-Revision-Date: 2026-03-07 19:48+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: \n"
@@ -22,6 +22,17 @@ msgstr ""
 #, javascript-format
 msgid "Unable to check emails: %s"
 msgstr "Verificacion impossibla dels corrièls : %s"
+
+#: src/account.js
+#, javascript-format
+msgid "You have %d unread email"
+msgid_plural "You have %d unread emails"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/account.js
+msgid "(No subject)"
+msgstr ""
 
 #: src/manager.js
 msgid "Error loading email accounts"
@@ -50,6 +61,17 @@ msgstr "Relambi de verificacion"
 #: src/prefs.js
 msgid "Time in seconds between email checks"
 msgstr "Interval en segondas entre las verificacions de corrièls"
+
+#: src/prefs.js
+#, fuzzy
+msgid "Group notifications"
+msgstr "Notificacions"
+
+#: src/prefs.js
+msgid ""
+"Show a summary instead of individual notifications when exceeding this count "
+"(0 to disable)"
+msgstr ""
 
 #: src/prefs.js
 msgid "Play sound"
