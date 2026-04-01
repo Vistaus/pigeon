@@ -12,23 +12,26 @@ A GNOME Shell extension for email notifications using GNOME Online Accounts.
 - Gmail, Outlook, and IMAP support via GNOME Online Accounts
 - Desktop notifications for new emails
 - Priority-only mode for important emails (disabled by default, Gmail/Outlook only)
+- Notification grouping when too many unread emails (configurable threshold)
 - Persistent notifications (disabled by default)
 - Sound notification (disabled by default)
 - Click notification to open email in browser or launch default mail client
 
-## Limitations
-
-- Exchange accounts are not supported
-- Outlook notifications require GNOME Online Accounts ≥ 3.55. Older versions use a Microsoft API that has been decommissioned.
+> [!NOTE]
+> - Exchange accounts are not supported
+> - Outlook notifications require GNOME Online Accounts ≥ 3.55. Older versions use a Microsoft API that has been decommissioned.
 
 ## Requirements
 
 - GNOME Shell 48 or later
 - A Google, Microsoft, or IMAP account configured in GNOME Online Accounts **Settings > Online Accounts**
-- **Debian-based:** `sudo apt install gir1.2-goa-1.0 gir1.2-xmlb-2.0`
-- **openSUSE:** `sudo zypper install typelib-1_0-Goa-1_0 typelib-1_0-Xmlb-1_0`
-- **Gentoo:** Ensure `dev-libs/libxmlb` is installed with the `introspection` USE flag
-- **Log out and back in after installing dependencies**
+
+> [!IMPORTANT]
+> - **Debian-based:** `sudo apt install gir1.2-goa-1.0 gir1.2-xmlb-2.0`
+> - **openSUSE:** `sudo zypper install typelib-1_0-Goa-1_0 typelib-1_0-Xmlb-1_0`
+> - **Gentoo:** Ensure `dev-libs/libxmlb` is installed with the `introspection` USE flag
+>
+> Log out and back in after installing dependencies.
 
 ## Installation
 
@@ -56,16 +59,17 @@ Then restart GNOME Shell and enable the extension.
 **Unable to check emails?**
 - Re-authenticate your account in Settings > Online Accounts
 - Remove and re-add the account if issues persist
-- View logs: `journalctl --grep="pigeon"` for details
 
 **Found a bug or issue?**
 
 Please [open an issue](https://github.com/subz69/pigeon/issues) with the relevant output of:
 ```bash
-journalctl --grep="pigeon"
+journalctl --grep=pigeon --no-pager
 ```
 
 ## Contributing
+
+Contributions are welcome! For larger changes, please open an issue first to discuss the approach.
 
 ### Translations
 
